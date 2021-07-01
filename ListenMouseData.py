@@ -2,8 +2,6 @@ from pynput.mouse import Listener
 import logging
 import datetime
 
-logging.basicConfig(filename="mouse_log.csv", level=logging.INFO, format='%(message)s')
-
 
 class Buffer:
     x = int()
@@ -55,9 +53,17 @@ def on_scroll(x, y, dx, dy):
 
 
 def log(dtime, x, y, button, dx, dy, ppace, action):
-    logging.info(str(dtime) + "; " + str(x) + "; " + str(y) + ";" + str(button) + "; " + str(dx) + "; " + str(dy) + "; " + str(ppace) + "; " + action)
+    logging.info(
+        str(dtime) + "; " + str(x) + "; " + str(y) + ";" + str(button) + "; " + str(dx) + "; " + str(dy) + "; " + str(
+            ppace) + "; " + action)
 
 
-with Listener(on_move=on_move, on_click=on_click, on_scroll=on_scroll) as listener:
-    logging.info("Asc_time; x; y; button; dx; dy; pace; Action")
-    listener.join()  # start
+def start():
+    with Listener(on_move=on_move, on_click=on_click, on_scroll=on_scroll) as listener:
+        logging.info("Asc_time; x; y; button; dx; dy; pace; Action")
+        listener.join()
+        return listener
+
+
+def stop(listener):
+    listener.stop()
