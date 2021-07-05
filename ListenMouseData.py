@@ -2,6 +2,8 @@ from pynput.mouse import Listener
 import logging
 import datetime
 
+global x
+
 
 class Buffer:
     x = int()
@@ -24,19 +26,19 @@ def pace(x, y, time):
             pace = (delta_x + delta_y) / delta_time
             return pace
         except ZeroDivisionError:
-            return " -"
+            return ""
     else:
         Buffer.time = time
         Buffer.x = x
         Buffer.y = y
         Buffer.firstMove = True
-        return " -"
+        return ""
 
 
 def on_move(x, y):
     action = "moved"
     time = datetime.datetime.now()
-    log(time, x, y, "-", "-", "-", pace(x, y, time), action)
+    log(time, x, y, "", " ", " ", pace(x, y, time), action)
 
 
 def on_click(x, y, button, pressed):
@@ -49,7 +51,7 @@ def on_click(x, y, button, pressed):
 def on_scroll(x, y, dx, dy):
     action = "scrolled"
     time = datetime.datetime.now()
-    log(time, x, y, "- ", dx, dy, " -", action)
+    log(time, x, y, "", dx, dy, " ", action)
 
 
 def log(dtime, x, y, button, dx, dy, ppace, action):
@@ -59,11 +61,18 @@ def log(dtime, x, y, button, dx, dy, ppace, action):
 
 
 def start():
+    global x
     with Listener(on_move=on_move, on_click=on_click, on_scroll=on_scroll) as listener:
-        logging.info("Asc_time; x; y; button; dx; dy; pace; Action")
         listener.join()
-        return listener
 
 
-def stop(listener):
-    listener.stop()
+def preset():
+    x = input('Dateinamen')
+    logging.basicConfig(filename=x + ".csv", level=logging.INFO, format='%(message)s')
+    logging.info("Asc_time; x; y; button; dx; dy; pace; Action")
+    print('Aufnahme der Mouse-interaktionen wird gestartet')
+
+
+if __name__ == "__main__":
+    preset()
+    start()
