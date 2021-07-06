@@ -74,5 +74,16 @@ def preset():
 
 
 if __name__ == "__main__":
-    preset()
-    start()
+    print('Was möchten sie tun? 1.Basisdaten erzeugen;  2. Nutzer identifizieren ;  3. Programm identifizieren ')
+    x = int(input())
+    if x == 1:
+        preset()
+        start()
+    elif x == 2:
+        print('Noch nicht implementiert')
+        exit(0)
+    elif x == 3:
+        print('Noch nicht implementiert')
+        exit(0)
+    else:
+        print(' Ungültige Eingabe ')
