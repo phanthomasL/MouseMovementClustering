@@ -1,8 +1,13 @@
+from numpy import sqrt
 from pynput.mouse import Listener
+from pynput import mouse
 import logging
 import datetime
+import time
 
 global x
+timebeginn = datetime.datetime.now()
+global user
 
 
 class Buffer:
@@ -18,46 +23,52 @@ def pace(x, y, time):
     buffer_time = Buffer.time
     is_firstmove = Buffer.firstMove
     if is_firstmove:
-        delta_x = abs(buffer_x) - abs(x)
-        delta_y = abs(buffer_y) - abs(y)
+        xy =sqrt( (buffer_x *buffer_x) + (x*x)+(buffer_y *buffer_y) - (y*y))
         delta_time = time - buffer_time
         delta_time = delta_time.total_seconds()
         try:
-            pace = (delta_x + delta_y) / delta_time
+            pace = xy / delta_time
             return pace
         except ZeroDivisionError:
-            return ""
+            return "0"
     else:
         Buffer.time = time
         Buffer.x = x
         Buffer.y = y
         Buffer.firstMove = True
-        return ""
+        return "0"
 
 
 def on_move(x, y):
-    action = "moved"
-    time = datetime.datetime.now()
-    log(time, x, y, "", " ", " ", pace(x, y, time), action)
+    action = 1
+    time = datetime.datetime.now() - timebeginn
+    log(time, x, y, "0", "0", "0", pace(x, y, time), action)
 
 
 def on_click(x, y, button, pressed):
-    action = "clicked"
-    time = datetime.datetime.now()
+    action = 2
+    global b
+    time = datetime.datetime.now()  -timebeginn
+    button.name
+    if button == mouse.Button.left:
+        b = 1
+    if button == mouse.Button.right:
+        b=9
+    else: b= 0
     if pressed:
-        log(time, x, y, button, " ", "  ", "  ", action)
+        log(time, x, y, b, "0", "0", "0", action)
 
 
 def on_scroll(x, y, dx, dy):
-    action = "scrolled"
-    time = datetime.datetime.now()
-    log(time, x, y, "", dx, dy, " ", action)
+    action = 3
+    time = datetime.datetime.now() - timebeginn
+    log(time, x, y, "0", dx, dy, "0", action)
 
 
 def log(dtime, x, y, button, dx, dy, ppace, action):
+    time_d_ms  = dtime / datetime.timedelta(milliseconds=1)
     logging.info(
-        str(dtime) + "; " + str(x) + "; " + str(y) + ";" + str(button) + "; " + str(dx) + "; " + str(dy) + "; " + str(
-            ppace) + "; " + action)
+        str(time_d_ms) + ";" + str(x) + ";" + str(y) + ";" + str(button) + ";" + str(dx) + ";" + str(dy) + ";" + str(ppace) + ";" + str(action)+";"+str(user))
 
 
 def start():
@@ -67,15 +78,26 @@ def start():
 
 
 def preset():
-    x = input('Dateinamen')
+    x = input('Geben sie einen Dateinamen an (<Name>.<Programm>)!\r\n')
+    global user
+    user = input('Geben sie ihren User an 1: Thomas, 2: Schwarki, 3: Taha, 4: Bodemann \r\n')
     logging.basicConfig(filename=x + ".csv", level=logging.INFO, format='%(message)s')
-    logging.info("Asc_time; x; y; button; dx; dy; pace; Action")
-    print('Aufnahme der Mouse-interaktionen wird gestartet')
+    logging.info("timeInMsSinceStart;x;y;button;dx;dy;pace;Action;user")
+    print('Aufnahme der Mouse-interaktionen wird gestartet in 5 sekunden')
+    y = 5
+    while(y>0):
+        time.sleep(1)
+        y -= 1
+        if(y==0):
+            print('Okaay Leeets goo')
+        else:
+         print(y)
 
 
 if __name__ == "__main__":
-    print('Was möchten sie tun? 1.Basisdaten erzeugen;  2. Nutzer identifizieren ;  3. Programm identifizieren ')
+    print('Was möchten sie tun? 1.Basisdaten erzeugen;  2. Nutzer identifizieren ;  3. Programm identifizieren\r\n')
     x = int(input())
+
     if x == 1:
         preset()
         start()
