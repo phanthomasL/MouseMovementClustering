@@ -76,7 +76,7 @@ def log(dtime, x, y, button, dx, dy, ppace, action):
 def start():
     global x
     with Listener(on_move=on_move, on_click=on_click, on_scroll=on_scroll) as listener:
-        Timer(10,listener.stop).start()
+        Timer(20,listener.stop).start()
         listener.join()
         print("Ich habe fertig!")
     
@@ -85,7 +85,7 @@ def presetUser():
     x = input('Geben sie einen Dateinamen an (<Name>.<Programm>)!\r\n')
     fn = x + ".csv"
     logging.basicConfig(filename= fn, level=logging.INFO, format='%(message)s')
-    logging.info("timeInMsSinceStart;x;y;button;dx;dy;pace;Action")
+    logging.info("timeInMsSinceStart;x;y;button;dx;dy;pace;Action;user")
     print('Aufnahme der Mouse-interaktionen wird gestartet in 5 sekunden')
     y = 5
     while(y>0):
