@@ -34,17 +34,40 @@ def KNNgetUser(file):
     maxvalue = max([thomas, schwarki, taha, bodemann])
 
     if (maxvalue == thomas):
-        return "Ist es Thomas"
+        return "Es ist Thomas"
     elif (maxvalue == schwarki):
-        return "Ist es Marvin"
+        return "Es ist Marvin"
     elif (maxvalue == taha):
-        return "Ist es Taha"
+        return "Es ist Taha"
     elif (maxvalue == bodemann):
-        return "Ist es Philipp"
+        return "Es ist Philipp"
 
 
+def KNNgetProgram(file):
+    df = createDataFrames()
+    print(df)
+    dfx = df[['x','y','button']]
+    dfy = df[['programm']]
+    classifier =KNeighborsClassifier(n_neighbors = 5 )
+    classifier.fit(dfx,dfy)
+    frame = pd.read_csv(file, sep=";")
+    print(frame)
+    frame = frame[['x','y','button']]
+    print(frame)
+    y_pred= classifier.predict(frame)
+    excel = (y_pred == 1).sum()
+    vsc = (y_pred == 2).sum()
+    webex = (y_pred == 3).sum()
+    
+    maxvalue = max([excel, vsc, webex])
 
-
+    if (maxvalue == excel):
+        return "Es ist Excel"
+    elif (maxvalue == vsc):
+        return "Es ist Visual studio code"
+    elif (maxvalue == webex):
+        return "Es ist WebEx"
+   
     
 
 

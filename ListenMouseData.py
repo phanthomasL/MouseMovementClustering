@@ -7,11 +7,12 @@ import time
 from threading import Timer
 import cluster 
 
-global x
 timebeginn = datetime.datetime.now()
 global user
+global prgm
 
 
+# Buffer saves the time for calculating the pace
 class Buffer:
     x = int()
     y = int()
@@ -19,6 +20,7 @@ class Buffer:
     firstMove = False
 
 
+#calculating the pace of mouse moves
 def pace(x, y, time):
     buffer_x = Buffer.x
     buffer_y = Buffer.y
@@ -41,12 +43,14 @@ def pace(x, y, time):
         return "0"
 
 
+# logs the position and the pace
 def on_move(x, y):
     action = 1
     time = datetime.datetime.now() - timebeginn
     log(time, x, y, "0", "0", "0", pace(x, y, time), action)
 
 
+# logs if a button has been pressed
 def on_click(x, y, button, pressed):
     action = 2
     global b
@@ -61,6 +65,7 @@ def on_click(x, y, button, pressed):
         log(time, x, y, b, "0", "0", "0", action)
 
 
+#logs the position if the scroll reel has been used. 
 def on_scroll(x, y, dx, dy):
     action = 3
     time = datetime.datetime.now() - timebeginn
@@ -70,23 +75,30 @@ def on_scroll(x, y, dx, dy):
 def log(dtime, x, y, button, dx, dy, ppace, action):
     time_d_ms  = dtime / datetime.timedelta(milliseconds=1)
     logging.info(
-        str(time_d_ms) + ";" + str(x) + ";" + str(y) + ";" + str(button) + ";" + str(dx) + ";" + str(dy) + ";" + str(ppace) + ";" + str(action))
+        str(time_d_ms) + ";" + str(x) + ";" + str(y) + ";" + str(button) + ";" + str(dx) + ";" + str(dy) + ";" + str(ppace) + ";" + str(action)+";"+str(user)+";"+ str(prgm))
 
-
+#starts the logging, duration is the duration in seconds
 def start():
-    global x
+    duration = 20
     with Listener(on_move=on_move, on_click=on_click, on_scroll=on_scroll) as listener:
-        Timer(20,listener.stop).start()
+        Timer(duration,listener.stop).start()
         listener.join()
         print("Ich habe fertig!")
     
 
-def presetUser():
+#sets some variables from input which are need to get user or programm
+def presetUserorProgram():
     x = input('Geben sie einen Dateinamen an (<Name>.<Programm>)!\r\n')
     fn = x + ".csv"
+    global user
+    user = input('Geben sie ihre Usernummer an! (1: Thomas, 2: Schwarki, 3: Taha, 4: Bodemann)\r\n')
+    global prgm
+    prgm = input('Geben sie die Programmnummer an (1: Excel, 2: Visual Studio code, 3: WebEx) \r\n')
+
     logging.basicConfig(filename= fn, level=logging.INFO, format='%(message)s')
-    logging.info("timeInMsSinceStart;x;y;button;dx;dy;pace;Action;user")
-    print('Aufnahme der Mouse-interaktionen wird gestartet in 5 sekunden')
+    logging.info("timeInMsSinceStart;x;y;button;dx;dy;pace;Action;user;rogramm")
+    
+    print('\r\nAufnahme der Mouse-interaktionen wird gestartet in 5 sekunden')
     y = 5
     while(y>0):
         time.sleep(1)
@@ -98,15 +110,18 @@ def presetUser():
     return fn 
 
 
-
+#sets some variables from input which are need to create base data
 def presetBase():
-    x = input('Geben sie einen Dateinamen an (<Name>.<Programm>)!\r\n')
+    x = input('Geben sie einen Dateinamen an! (<Name>.<Programm>)\r\n')
     global user
-    user = input('Geben sie ihren User an 1: Thomas, 2: Schwarki, 3: Taha, 4: Bodemann \r\n')
+    user = input('Geben sie ihre Usernummer an! (1: Thomas, 2: Schwarki, 3: Taha, 4: Bodemann)\r\n')
+    global prgm
+    prgm = input('Geben sie die Programmnummer an! (1: Excel, 2: Visual studio code, 3: WebEx) \r\n')
+
     logging.basicConfig(filename='Data/'+x + ".csv", level=logging.INFO, format='%(message)s')
-    logging.info("timeInMsSinceStart;x;y;button;dx;dy;pace;Action;user")
+    logging.info("timeInMsSinceStart;x;y;button;dx;dy;pace;Action;user;programm")
     
-    print('Aufnahme der Mouse-interaktionen wird gestartet in 5 sekunden')
+    print('Aufnahme der Mouse-Interaktionen wird gestartet in 5 sekunden')
     y = 5
     while(y>0):
         time.sleep(1)
@@ -126,13 +141,16 @@ if __name__ == "__main__":
         presetBase()
         start()
     elif x == 2:
-        file = presetUser()
+        file = presetUserorProgram()
         start()
         user = cluster.KNNgetUser(file)
         print(user)
         exit(0)
     elif x == 3:
-        print('Noch nicht implementiert')
+        file = presetUserorProgram()
+        start()
+        prgm = cluster.KNNgetProgram(file)
+        print(prgm)
         exit(0)
     else:
         print(' Ungültige Eingabe ')
