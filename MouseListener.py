@@ -1,4 +1,5 @@
 from numpy import sqrt
+import numpy
 from pynput.mouse import Listener
 from pynput import mouse
 import logging
@@ -31,6 +32,8 @@ def pace(x, y, time):
         delta_time = delta_time.total_seconds()
         try:
             pace = xy / delta_time
+            if numpy.isnan(pace):
+                return "0"
             return pace
         except ZeroDivisionError:
             return "0"

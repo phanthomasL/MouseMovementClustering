@@ -8,7 +8,7 @@ def KNNgetProgram(file):
     print(df)
     dfx = df[['x','y','button']]
     dfy = df[['programm']]
-    classifier = KNeighborsClassifier(n_neighbors = 5 )
+    classifier = KNeighborsClassifier(n_neighbors = 3 )
     classifier.fit(dfx,dfy)
     frame = pd.read_csv(file, sep=";")
     print(frame)
