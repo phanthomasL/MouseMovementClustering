@@ -38,7 +38,7 @@ def presetBase():
     global user
     user = input('Geben sie ihre Usernummer an! (1: Thomas, 2: Schwarki, 3: Taha, 4: Bodemann)\r\n')
     global prgm
-    prgm = input('Geben sie die Programmnummer an! (1: Excel, 2: Visual studio code, 3: WebEx) \r\n')
+    prgm = input('Geben sie die Programmnummer an! (1: Excel, 2: Visual studio code, 3: Chrome) \r\n')
 
     logging.basicConfig(filename='Data/'+x + ".csv", level=logging.INFO, format='%(message)s')
     logging.info("timeInMsSinceStart;x;y;button;dx;dy;pace;Action;user;programm")

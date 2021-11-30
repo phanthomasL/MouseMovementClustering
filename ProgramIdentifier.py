@@ -24,4 +24,4 @@ def KNNgetProgram(file):
     elif (maxvalue == vsc):
         return "Es ist Visual studio code"
     elif (maxvalue == webex):
-        return "Es ist WebEx"
+        return "Es ist Chrome"

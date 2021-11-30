@@ -82,7 +82,7 @@ def start(p_user,p_prgm):
     user = p_user
     global prgm
     prgm = p_prgm
-    duration = 20
+    duration = 90
     with Listener(on_move=on_move, on_click=on_click, on_scroll=on_scroll) as listener:
         Timer(duration,listener.stop).start()
         listener.join()
