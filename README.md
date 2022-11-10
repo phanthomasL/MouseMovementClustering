@@ -1,5 +1,5 @@
-# BigData
+# Mausbewegungsanalyse über Clustering
 
-Projekt für die Hochschule
+Projekt für die Hochschule im Modul Big Data
 
-Analalyse des Nutzers oder eines Programms über Clustering mit Mausbewegungsdaten
+Analalyse des Nutzers bzw. eines Programms über Clustering mit Mausbewegungsdaten.
